@@ -72,7 +72,7 @@ GET localhost:8080/todos
     client.test("Status code is 200", function () {
         client.assert(response.status === 200, "Status code is 200");
         client.assert(response.body !== null, "body is not null");
-        client.assert(response.body.length > 2, "body has 2 items");
+        client.assert(response.body.length >= 2, "body has 2 items");
     });
 %}
 
@@ -103,7 +103,7 @@ GET localhost:8080/todos/{{id1}}
     });
 %}
 
-### delete todo - happy - 2
+### delete todo - happy - 1
 DELETE localhost:8080/todos/{{id1}}
 
 > {%
