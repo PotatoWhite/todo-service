@@ -1,0 +1,140 @@
+
+### create todo - happy - 1
+POST localhost:8080/todos
+Content-Type: application/json
+
+{
+  "title": "Task 1"
+}
+
+> {%
+    client.test("Status code is 201", function () {
+        client.assert(response.status === 201, "Status code is 201");
+        client.assert(response.body !== null, "body is not null");
+        client.assert(response.body.title === "Task 1", "body has title");
+        client.assert(response.body.status === "active", "body has status");
+
+        client.global.set("id1", response.body.id);
+    });
+%}
+
+
+### create todo - happy - 2
+POST localhost:8080/todos
+Content-Type: application/json
+
+{
+  "title": "Task 2"
+}
+
+> {%
+    client.test("Status code is 201", function () {
+        client.assert(response.status === 201, "Status code is 201");
+        client.assert(response.body !== null, "body is not null");
+        client.assert(response.body.title === "Task 2", "body has title");
+        client.assert(response.body.status === "active", "body has status");
+
+        client.global.set("id2", response.body.id);
+    });
+%}
+
+
+### get todo - happy - 1
+GET localhost:8080/todos/{{id1}}
+
+> {%
+    client.test("Status code is 200", function () {
+        client.assert(response.status === 200, "Status code is 200");
+        client.assert(response.body !== null, "body is not null");
+        client.assert(response.body.id == client.global.get("id1"), "body has id");
+        client.assert(response.body.title === "Task 1", "body has title");
+        client.assert(response.body.status === "active", "body has status");
+    });
+%}
+
+### get todo - happy - 2
+GET localhost:8080/todos/{{id2}}
+
+> {%
+    client.test("Status code is 200", function () {
+        client.assert(response.status === 200, "Status code is 200");
+        client.assert(response.body !== null, "body is not null");
+        client.assert(response.body.id == client.global.get("id2"), "body has id");
+        client.assert(response.body.title === "Task 2", "body has title");
+        client.assert(response.body.status === "active", "body has status");
+    });
+%}
+
+### get todos - happy
+GET localhost:8080/todos
+
+> {%
+    client.test("Status code is 200", function () {
+        client.assert(response.status === 200, "Status code is 200");
+        client.assert(response.body !== null, "body is not null");
+        client.assert(response.body.length > 2, "body has 2 items");
+    });
+%}
+
+### update todo - happy - 1
+PATCH localhost:8080/todos/{{id1}}
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+
+> {%
+    client.test("Status code is 200", function () {
+        client.assert(response.status === 200, "Status code is 200");
+    });
+%}
+
+### get todo - happy - 1
+GET localhost:8080/todos/{{id1}}
+
+> {%
+    client.test("Status code is 200", function () {
+        client.assert(response.status === 200, "Status code is 200");
+        client.assert(response.body !== null, "body is not null");
+        client.assert(response.body.id == client.global.get("id1"), "body has id");
+        client.assert(response.body.title === "Task 1", "body has title");
+        client.assert(response.body.status === "completed", "body has status");
+    });
+%}
+
+### delete todo - happy - 2
+DELETE localhost:8080/todos/{{id1}}
+
+> {%
+    client.test("Status code is 204", function () {
+        client.assert(response.status === 204, "Status code is 204");
+    });
+%}
+
+### get todos
+GET localhost:8080/todos/{{id1}}
+
+> {%
+    client.test("Status code is 204", function () {
+        client.assert(response.status === 204, "Status code is 204");
+    });
+%}
+
+### delete todo - happy - 2
+DELETE localhost:8080/todos/{{id2}}
+
+> {%
+    client.test("Status code is 204", function () {
+        client.assert(response.status === 204, "Status code is 204");
+    });
+%}
+
+### get todos
+GET localhost:8080/todos/{{id2}}
+
+> {%
+    client.test("Status code is 204", function () {
+        client.assert(response.status === 204, "Status code is 204");
+    });
+%}
